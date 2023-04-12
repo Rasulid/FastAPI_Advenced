@@ -5,7 +5,7 @@ from sqlalchemy import Table, Column, Integer, String, TIMESTAMP, ForeignKey, JS
 
 from database import Base
 
-metadata = MetaData()
+from database import metadata
 
 role = Table(
     "role",
@@ -29,6 +29,7 @@ user = Table(
     Column("is_verified", Boolean, default=False, nullable=False),
 )
 
+
 class User(SQLAlchemyBaseUserTable[int], Base):
     id = Column(Integer, primary_key=True)
     email = Column(String, nullable=False)
@@ -39,3 +40,19 @@ class User(SQLAlchemyBaseUserTable[int], Base):
     is_active: bool = Column(Boolean, default=True, nullable=False)
     is_superuser: bool = Column(Boolean, default=False, nullable=False)
     is_verified: bool = Column(Boolean, default=False, nullable=False)
+
+
+learning = Table(
+    "learn",
+    metadata,
+    Column("id", Integer, primary_key=True),
+    Column("title", String, nullable=False),
+    Column("description", String, nullable=False),
+)
+
+
+class Learning(Base):
+    __tablename__ = 'learn'
+    id = Column(Integer, primary_key=True)
+    title = Column(String, nullable=False)
+    description = Column(String, nullable=False)
