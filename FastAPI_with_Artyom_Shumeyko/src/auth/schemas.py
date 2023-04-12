@@ -10,7 +10,7 @@ class UserRead(schemas.BaseUser[int]):
     role_id: int
     is_active: bool = True
     is_superuser: bool = False
-    is_verified: bool = False
+    is_verified: bool = True
 
     class Config:
         orm_mode = True

@@ -12,7 +12,7 @@ router = APIRouter(tags=['Operations'],
                    prefix='/operations')
 
 
-@router.get('long_operation')
+@router.get('/long_operation')
 @cache(expire=30)
 def long_operation():
     time.sleep(2)
