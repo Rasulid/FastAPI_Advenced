@@ -21,20 +21,24 @@ def long_operation():
     return "So many data"
 
 
-@router.get("/", response_model=List[OperationCreate])
-async def get_specific_operations(operation_type: str, session: AsyncSession = Depends(get_async_session)):
+@router.get("", response_model=List[OperationCreate])
+async def get_specific_operations(
+        operation_type: str,
+        session: AsyncSession = Depends(get_async_session),
+):
     try:
         query = select(operation).where(operation.c.type == operation_type)
         result = await session.execute(query)
-        # return {'status': "success",
-        #         "data": result.all(),
-        #         "details": None}
-        return result.all()
+        return {
+          "data": result.all()
+        }
     except Exception:
-        raise HTTPException(status_code=499, detail={
-            'status': "error",
+        # Передать ошибку разработчикам
+        raise HTTPException(status_code=500, detail={
+            "status": "error",
             "data": None,
-            "details": None})
+            "details": None
+        })
 
 
 class Test_Schema(BaseModel):

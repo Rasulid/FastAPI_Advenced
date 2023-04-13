@@ -4,13 +4,16 @@ from fastapi_cache.backends.redis import RedisBackend
 from redis import asyncio as aioredis
 from auth.base_config import auth_backend, fastapi_users
 from auth.schemas import UserRead, UserCreate
-from tasks.router import router
+from tasks.router import router as router_task
 from fastapi.middleware.cors import CORSMiddleware
 from operations.router import router as router_operation
+from pages.router import router as router_page
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI(
     title="Trading App"
 )
+app.mount('/static', StaticFiles(directory='static'), name="static")
 
 app.include_router(
     fastapi_users.get_auth_router(auth_backend),
@@ -25,7 +28,8 @@ app.include_router(
 )
 
 app.include_router(router_operation)
-app.include_router(router)
+app.include_router(router_task)
+app.include_router(router_page)
 
 origins = [
     "url for frontend"
