@@ -8,7 +8,7 @@ from typing import Dict, List
 from database import get_async_session
 from operations.model import operation
 from operations.schemas import OperationCreate
-from auth.model import Learning , learning
+from auth.model import Learning, learning
 
 router = APIRouter(tags=['Operations'],
                    prefix='/operations')
@@ -37,15 +37,20 @@ async def get_specific_operations(operation_type: str, session: AsyncSession = D
             "details": None})
 
 
-@router.get('/test', response_model=None)
+class Test_Schema(BaseModel):
+    title: str
+    description: str
+
+    class Config:
+        orm_mode = True
+
+
+@router.get('/test', response_model=List[Test_Schema])
 async def learn(session: AsyncSession = Depends(get_async_session)):
     query = select(learning)
     result = await session.execute(query)
     return result.all()
 
-class Test_Schema(BaseModel):
-    title: str
-    description: str
 
 @router.post('/test')
 async def add_test_request(schema: Test_Schema, session: AsyncSession = Depends(get_async_session)):
